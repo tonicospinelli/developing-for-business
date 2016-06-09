@@ -15,6 +15,12 @@ Eu como um usuário convidado, quero adicionar um produto esgotado em minha list
 
 #### Run Application
 
+create sqlite database
+```shell
+$ php cli/create_tables.php
+```
+
+start php built-in server
 ```shell
 $ php -S localhost:8000 -t public
 ```

@@ -21,7 +21,7 @@
         <tr>
             <td><?php echo $wish['id']; ?> </td>
             <td><?php echo $wish['product_name']; ?> </td>
-            <?php if ($wish['status'] == 'P' && $wish['product_stock'] == 0): ?>
+            <?php if ($wish['product_stock'] == 0): ?>
                 <td>Not Available</td>
             <?php else: ?>
                 <td>Available</td>

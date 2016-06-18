@@ -1,6 +1,11 @@
 <?php
 
-$database = __DIR__ . '/../data/business.db';
-$dsn = 'sqlite:' . $database;
-$db = new PDO($dsn);
+require_once __DIR__ . '/../config/app.php';
 
+/**
+ * @return PDO
+ */
+function dbConnect()
+{
+    return new PDO(DATABASE_DSN, DATABASE_USERNAME, DATABASE_PASSWORD);
+}

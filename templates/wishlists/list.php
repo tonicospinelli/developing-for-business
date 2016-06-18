@@ -2,7 +2,7 @@
 
 <?php ob_start() ?>
     <h3><?php echo $title;?></h3>
-    <?php if (null !== $errormsg): ?>
+    <?php if (isset($errormsg)): ?>
         <div class="alert error"><?php echo $errormsg; ?> </div>
     <?php elseif (isset($wishItem)): ?>
         <div class="alert success"><?php echo $successmsg; ?></div>
@@ -26,7 +26,7 @@
                 <?php else: ?>
                     <td>Available</td>
                 <?php endif; ?>
-                <td><?php echo removeUrl('wishlist.php', $wish['id'], ['email' => $_GET['email']]); ?> </td>
+                <td><?php echo removeUrl('wishlist', $wish['id'], ['email' => $_GET['email']]); ?> </td>
             </tr>
         <?php endforeach; ?>
         </tbody>

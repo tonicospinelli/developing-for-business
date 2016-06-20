@@ -26,7 +26,7 @@ function getProductFromPost(array $data)
     return array(
         'id' => (isset($data['id']) ? $data['id'] : null),
         'name' => $data['name'],
-        'price' => $data['price'],
+        'unit_price' => $data['unit_price'],
         'stock' => $data['stock']
     );
 }
@@ -57,6 +57,21 @@ function addProduct(array $product)
         $stm->execute([$product['name'], $product['unit_price'], $product['stock']]);
         $db->commit();
         return $db->lastInsertId();
+    } catch (Exception $e) {
+        $db->rollBack();
+    }
+    return false;
+}
+
+function removeProduct($id)
+{
+    $db = dbConnect();
+    $db->beginTransaction();
+    try {
+        $stm = $db->prepare('DELETE FROM products WHERE id = ?');
+        $stm->execute([$id]);
+        $db->commit();
+        return true;
     } catch (Exception $e) {
         $db->rollBack();
     }

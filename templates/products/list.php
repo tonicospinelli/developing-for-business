@@ -2,7 +2,7 @@
 
 <?php ob_start() ?>
     <h3>Products</h3>
-    <?php if (null !== $errormsg): ?>
+    <?php if (isset($errormsg)): ?>
         <div class="alert error"><?php echo $errormsg; ?> </div>
     <?php elseif (isset($product)): ?>
         <div class="alert success"><?php echo $successmsg; ?></div>
@@ -24,7 +24,7 @@
                 <td><?php echo $product['name']; ?> </td>
                 <td><?php echo $product['unit_price']; ?> </td>
                 <td><?php echo $product['stock']; ?> </td>
-                <td><?php echo removeUrl('product.php', $product['id']); ?> </td>
+                <td><?php echo removeUrl('products', $product['id']); ?> </td>
             </tr>
         <?php endforeach; ?>
         </tbody>

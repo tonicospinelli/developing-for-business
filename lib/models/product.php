@@ -19,42 +19,46 @@ function isValidProduct(array $data)
 /**
  * Gets product from data.
  * @param array $data
- * @return array Returns a formatted product.
+ * @return \Develop\Business\Product\Product Returns a formatted product.
  */
 function getProductFromPost(array $data)
 {
-    return array(
-        'id' => (isset($data['id']) ? $data['id'] : null),
-        'name' => $data['name'],
-        'unit_price' => $data['unit_price'],
-        'stock' => $data['stock']
+    return new \Develop\Business\Product\Product(
+        $data['name'],
+        $data['unit_price'],
+        $data['stock'],
+        (isset($data['id']) ? $data['id'] : null)
     );
 }
 
 /**
  * Find all products from database.
- * @return array
+ * @return \Develop\Business\Product\Product[] Returns a list of Products
  */
 function findAllProducts()
 {
     $db = dbConnect();
     $stm = $db->prepare('SELECT * FROM products');
     $stm->execute();
-    return $stm->fetchAll(PDO::FETCH_ASSOC);
+    return $stm->fetchAll(
+        \PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE,
+        \Develop\Business\Product\Product::class,
+        ['', 0.0, 0]
+    );
 }
 
 /**
  * Adds new product.
- * @param array $product
+ * @param \Develop\Business\Product\Product $product
  * @return bool|int Returns a product ID when insert successful otherwise false.
  */
-function addProduct(array $product)
+function addProduct(\Develop\Business\Product\Product $product)
 {
     $db = dbConnect();
     $db->beginTransaction();
     try {
-        $stm = $db->prepare('INSERT INTO products (name, unit_price, stock) VALUES (?, ?, ?)');
-        $stm->execute([$product['name'], $product['unit_price'], $product['stock']]);
+        $stm = $db->prepare('INSERT INTO products (name, unitPrice, stock) VALUES (?, ?, ?)');
+        $stm->execute([$product->getName(), $product->getUnitPrice(), $product->getStock()]);
         $db->commit();
         return $db->lastInsertId();
     } catch (Exception $e) {

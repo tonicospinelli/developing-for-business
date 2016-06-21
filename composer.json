@@ -16,6 +16,9 @@
             "./lib/controllers/wishlist.php",
             "./lib/models/product.php",
             "./lib/models/wishlist.php"
-        ]
+        ],
+        "psr-4": {
+            "Develop\\Business\\": "src/"
+        }
     }
 }

@@ -18,13 +18,14 @@
         </tr>
         </thead>
         <tbody>
+        <?php /** @var \Develop\Business\Product\Product $product */?>
         <?php foreach ($products as $product): ?>
             <tr>
-                <td><?php echo $product['id']; ?> </td>
-                <td><?php echo $product['name']; ?> </td>
-                <td><?php echo $product['unit_price']; ?> </td>
-                <td><?php echo $product['stock']; ?> </td>
-                <td><?php echo removeUrl('products', $product['id']); ?> </td>
+                <td><?php echo $product->getId(); ?> </td>
+                <td><?php echo $product->getName(); ?> </td>
+                <td><?php echo $product->getUnitPrice(); ?> </td>
+                <td><?php echo $product->getStock(); ?> </td>
+                <td><?php echo removeUrl('products', $product->getId()); ?> </td>
             </tr>
         <?php endforeach; ?>
         </tbody>

@@ -1,0 +1,21 @@
+{
+    "name": "tonicospinelli/developing-for-business",
+    "description": "A Quick Project to show how to is possible evolute application in Flat PHP to Object Oriented PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Antonio Spinelli",
+            "email": "tonicospinelli85@gmail.com"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "./lib/dbconn.php",
+            "./lib/functions.php",
+            "./lib/controllers/product.php",
+            "./lib/controllers/wishlist.php",
+            "./lib/models/product.php",
+            "./lib/models/wishlist.php"
+        ]
+    }
+}

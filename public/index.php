@@ -2,12 +2,7 @@
 
 // load and initialize any global libraries
 require_once __DIR__ . '/../config/app.php';
-require_once LIBRARY_DIR . '/functions.php';
-require_once LIBRARY_DIR . '/dbconn.php';
-require_once LIBRARY_DIR . '/models/product.php';
-require_once LIBRARY_DIR . '/controllers/product.php';
-require_once LIBRARY_DIR . '/models/wishlist.php';
-require_once LIBRARY_DIR . '/controllers/wishlist.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // route the request internally
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

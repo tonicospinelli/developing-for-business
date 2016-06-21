@@ -22,6 +22,6 @@ function wishlistRemoveAction($email, $id)
     if (!removeWishItem($id)) {
         $errormsg = 'Product could not be removed from wishlist! :(';
     }
-    header('Location: /wishlist?' . http_build_query(['email' => $_GET['email']]));
+    header('Location: /index.php/wishlist?' . http_build_query(['email' => $_GET['email']]));
 
 }

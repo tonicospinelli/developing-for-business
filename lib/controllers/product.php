@@ -1,8 +1,10 @@
 <?php
 
-use Develop\Business\Product\Exceptions\ProductException;
-use Develop\Business\Product\Product;
-use Develop\Business\Product\Repositories\Product as ProductRepository;
+use Develop\Business\Product\Exceptions\ProductNotFoundException;
+use Develop\Business\Product\Factory as ProductFactory;
+use Develop\Business\Product\Intentions\AddProduct as AddProductIntention;
+use Develop\Business\Application\Product\Repositories\Product as ProductRepository;
+use Develop\Business\Product\UseCases\AddProduct as AddProductUseCase;
 
 function productListAction()
 {
@@ -12,20 +14,22 @@ function productListAction()
     include TEMPLATE_DIR . '/products/list.php';
 }
 
+/**
+ * @param $post
+ */
 function productAddAction($post)
 {
-    $product = getProductFromPost($post['product']);
+    $product = $post['product'];
 
     $db = dbConnect();
-    $repository = new ProductRepository($db);
 
+    $intention = new AddProductIntention($product['name'], $product['unit_price'], $product['stock']);
+    $repository = new ProductRepository($db);
     try {
-        if ($repository->findByName($product->getName())) {
-            throw ProductException::exists($product->getName());
-        }
-        $product = $repository->add($product);
-        $successmsg = 'Product was saved successfully!';
-    } catch (ProductException $e) {
+        $useCase = new AddProductUseCase($repository, new ProductFactory());
+        $product = $useCase->execute($intention);
+        $successmsg = "Product {$product->getName()} added successful";
+    } catch (\Develop\Business\Product\Exceptions\ProductExistsException $e) {
         $errormsg = $e->getMessage();
     }
     productListAction();
@@ -38,12 +42,9 @@ function productRemoveAction($id)
 
     try {
         $product = $repository->find($id);
-        if (!$product instanceof Product) {
-            throw ProductException::notFound($id);
-        }
         $repository->delete($product);
         header('Location: /index.php/products');
-    } catch (ProductException $e) {
+    } catch (ProductNotFoundException $e) {
         $errormsg = $e->getMessage();
     }
     productListAction();

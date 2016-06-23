@@ -1,11 +1,12 @@
 <?php
 
-namespace Develop\Business\Product\Tests\Repositories;
+namespace Develop\Business\Application\Product\Tests\Repositories;
 
 use Develop\Business\Product\Exceptions\ProductException;
+use Develop\Business\Product\Exceptions\ProductNotFoundException;
 use Develop\Business\Product\Product;
-use Develop\Business\Product\Repositories\Product as ProductRepository;
-use Develop\Business\Product\Tests\Repositories\Stubs\PDOSpy;
+use Develop\Business\Application\Product\Repositories\Product as ProductRepository;
+use Develop\Business\Application\Product\Tests\Repositories\Stubs\PDOSpy;
 use Prophecy\Argument;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
@@ -46,6 +47,33 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $product->getId());
     }
 
+    public function testNotFindProductById()
+    {
+        $this->expectException(ProductNotFoundException::class);
+        $this->expectExceptionMessage('The product(100) was not found.');
+        $pdoSpy = new PDOSpy();
+
+        $repository = new ProductRepository($pdoSpy);
+
+        $product = $repository->find(100);
+
+        $this->assertInstanceOf(Product::class, $product);
+        $this->assertEquals(1, $product->getId());
+    }
+
+    public function testNotFindProductByName()
+    {
+        $this->expectException(ProductNotFoundException::class);
+        $this->expectExceptionMessage('The product(Hat) was not found.');
+
+        $pdoSpy = new PDOSpy();
+
+        $repository = new ProductRepository($pdoSpy);
+
+        $repository->findByName('Hat');
+
+    }
+
     public function testAddNewProductSuccessful()
     {
         $pdoSpy = new PDOSpy();
@@ -67,7 +95,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testAddNewProductFailed()
     {
         $this->expectException(ProductException::class);
-        $this->expectExceptionMessage('The product T-Shirt was not added');
+        $this->expectExceptionMessage('The product(T-Shirt) was not added');
 
         $product = new Product('T-Shirt', 99.9, 10, 1);
 
@@ -98,7 +126,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testDeleteProductFailed()
     {
         $this->expectException(ProductException::class);
-        $this->expectExceptionMessage('The product Shoes was not deleted');
+        $this->expectExceptionMessage('The product(Shoes) was not deleted');
 
         $product = new Product('Shoes', 69.9, 0, 1);
 
@@ -127,7 +155,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testUpdateProductFailed()
     {
         $this->expectException(ProductException::class);
-        $this->expectExceptionMessage('The product Shoes was not updated');
+        $this->expectExceptionMessage('The product(Shoes) was not updated');
 
         $product = new Product('Shoes', 79.9, 0, 1);
 

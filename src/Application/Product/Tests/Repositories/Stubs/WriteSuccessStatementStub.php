@@ -1,6 +1,6 @@
 <?php
 
-namespace Develop\Business\Product\Tests\Repositories\Stubs;
+namespace Develop\Business\Application\Product\Tests\Repositories\Stubs;
 
 class WriteSuccessStatementStub extends \PDOStatement
 {

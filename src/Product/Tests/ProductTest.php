@@ -1,6 +1,6 @@
 <?php
 
-namespace Business\Product\Tests;
+namespace Develop\Business\Product\Tests;
 
 use Develop\Business\Product\Product;
 

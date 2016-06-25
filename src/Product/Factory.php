@@ -3,7 +3,7 @@
 namespace Develop\Business\Product;
 
 use Develop\Business\Product\Intentions\Intention;
-use Develop\Business\Product\Intentions\IntentionIdentified;
+use Develop\Business\Product\Intentions\IdentifiedIntention;
 
 class Factory
 {
@@ -12,7 +12,7 @@ class Factory
         return new Product($intent->getName(), $intent->getUnitPrice(), $intent->getStock());
     }
 
-    public static function createFromIntentionIdentified(IntentionIdentified $intent)
+    public static function createFromIntentionIdentified(IdentifiedIntention $intent)
     {
         return new Product(
             $intent->getName(),

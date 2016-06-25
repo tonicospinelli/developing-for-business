@@ -10,7 +10,9 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if ('/index.php/products' === $uri) {
     productListAction();
 } elseif ('/index.php/products/add' === $uri && isset($_POST['product']) && isValidProduct($_POST['product'])) {
-    productAddAction($_POST);
+    productAddAction($_POST['product']);
+} elseif ('/index.php/products/update' === $uri && isset($_GET['id']) && isValidProduct($_POST['product'])) {
+    productUpdateAction($_GET['id'], $_POST['product']);
 } elseif ('/index.php/products/remove' === $uri && isset($_GET['remove'])) {
     productRemoveAction($_GET['remove']);
 } elseif ('/index.php/wishlist' === $uri && isset($_GET['email'])) {

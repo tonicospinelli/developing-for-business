@@ -3,14 +3,13 @@
 namespace Develop\Business\Product\UseCases;
 
 use Develop\Business\Product\Exceptions\ProductException;
-use Develop\Business\Product\Exceptions\ProductExistsException;
-use Develop\Business\Product\Exceptions\ProductNotFoundException;
 use Develop\Business\Product\Factory as ProductFactory;
 use Develop\Business\Product\Intentions\Intention;
+use Develop\Business\Product\Intentions\IntentionIdentified;
 use Develop\Business\Product\Product;
 use Develop\Business\Product\Repositories\Product as ProductRepository;
 
-class AddProduct implements UseCase
+class UpdateProduct implements UseCase
 {
     /**
      * @var ProductRepository
@@ -35,19 +34,27 @@ class AddProduct implements UseCase
     /**
      * @param Intention $intention
      * @return Product
-     * @throws ProductExistsException
      */
     public function execute(Intention $intention)
     {
-        try {
-            $product = $this->repository->findByName($intention->getName());
-            throw ProductException::existsWithName($product->getName());
-        } catch (ProductNotFoundException $e) {
-            // do nothing
-        }
+        return $this->updateProduct($intention);
+    }
 
-        $product = $this->factory->createFromIntention($intention);
+    /**
+     * @param IntentionIdentified $intention
+     * @return Product
+     * @throws ProductException
+     */
+    private function updateProduct(IntentionIdentified $intention)
+    {
+        $product = $this->repository->find($intention->getId());
 
-        return $this->repository->add($product);
+        $productDirty = $this->factory->createFromIntentionIdentified($intention);
+
+        $updatedProduct = $product->merge($productDirty);
+
+        $this->repository->update($updatedProduct);
+
+        return $updatedProduct;
     }
 }

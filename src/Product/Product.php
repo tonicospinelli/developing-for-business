@@ -45,6 +45,16 @@ class Product
     }
 
     /**
+     * 
+     * @param int $id
+     * @return Product Returns a new object with given ID.
+     */
+    public function setId($id)
+    {
+        return new static($this->getName(), $this->getUnitPrice(), $this->getStock(), $id);
+    }
+
+    /**
      * @return string
      */
     public function getName()

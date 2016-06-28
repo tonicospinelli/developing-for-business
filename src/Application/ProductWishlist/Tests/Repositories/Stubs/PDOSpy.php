@@ -1,15 +1,19 @@
 <?php
 
-namespace Develop\Business\Application\Wishlist\Tests\Repositories\Stubs;
+namespace Develop\Business\Application\ProductWishlist\Tests\Repositories\Stubs;
 
 use Develop\Business\Wishlist\Factory as WishlistFacotry;
 
 class PDOSpy extends \PDO
 {
     public $commitCalled = false;
+
     public $rollBackCalled = false;
+
     public $beginTransactionCalled = false;
+
     public $setAttributeCalled = false;
+
     public $failureOnWrite = false;
 
     /**
@@ -56,8 +60,13 @@ class PDOSpy extends \PDO
         if (FindStatementStub::equalsTo($statement)) {
             return new FindStatementStub($this->factory);
         }
+
         if (FindAllToNotifyStatementStub::equalsTo($statement)) {
             return new FindAllToNotifyStatementStub($this->factory);
+        }
+
+        if (FindOneByEmailAndItemIdStatementStub::equalsTo($statement)) {
+            return new FindOneByEmailAndItemIdStatementStub($this->factory);
         }
 
         if ($statement == 'INSERT INTO wishlists (email, product_id, status) VALUES (?, ?, ?)') {

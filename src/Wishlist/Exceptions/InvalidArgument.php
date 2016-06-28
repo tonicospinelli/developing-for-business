@@ -2,7 +2,7 @@
 
 namespace Develop\Business\Wishlist\Exceptions;
 
-class InvalidArgument extends \Exception
+class InvalidArgument extends \Exception implements Exception
 {
     /**
      * @param string $email

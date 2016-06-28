@@ -2,7 +2,7 @@
 
 namespace Develop\Business\Wishlist\Exceptions;
 
-class WishlistNotFoundException extends \Exception
+class WishlistNotFoundException extends \Exception implements Exception
 {
     /**
      * @param string $email
@@ -11,7 +11,7 @@ class WishlistNotFoundException extends \Exception
      */
     public static function byEmailAndItemId($email, $itemId)
     {
-        return new static("The item was not found by email({$email}) and id({$itemId}) from your wishlist.");
+        return new static("The item was not found by email({$email}) and itemId({$itemId}) from your wishlist.");
     }
 
     public static function byId($id)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Develop\Business\Application\Wishlist\Tests\Repositories\Stubs;
+namespace Develop\Business\Application\ProductWishlist\Tests\Repositories\Stubs;
 
 use Develop\Business\Wishlist\Factory;
 use Develop\Business\Wishlist\Status;
@@ -55,7 +55,7 @@ WHERE
     {
         $this->filter = reset($input_parameters);
         $this->rows = [
-            $this->factory->createFromQueryResult(1, 'email@test.com', 1, 'Shoes', false, Status::PENDING)
+            $this->factory->fromQueryResult(1, 'email@test.com', 1, 'Shoes', false, Status::PENDING)
         ];
     }
 

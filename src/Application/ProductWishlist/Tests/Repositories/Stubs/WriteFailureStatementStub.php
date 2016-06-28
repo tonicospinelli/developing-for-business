@@ -1,6 +1,6 @@
 <?php
 
-namespace Develop\Business\Application\Wishlist\Tests\Repositories\Stubs;
+namespace Develop\Business\Application\ProductWishlist\Tests\Repositories\Stubs;
 
 class WriteFailureStatementStub extends \PDOStatement
 {

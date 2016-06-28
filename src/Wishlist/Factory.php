@@ -7,19 +7,36 @@ class Factory
     /**
      * @param int $id
      * @param string $email
-     * @param int $desiredItemId
-     * @param string $desiredItemName
-     * @param int $desiredItemStock
+     * @param int $itemId
+     * @param string $itemName
+     * @param int $itemIsAvailable
      * @param string $status
      * @return Wishlist
      */
-    public function createFromQueryResult($id, $email, $desiredItemId, $desiredItemName, $desiredItemStock, $status)
+    public function createFromQueryResult($id, $email, $itemId, $itemName, $itemIsAvailable, $status)
     {
-        return new Wishlist(
-            $email,
-            new Item($desiredItemId, $desiredItemName, $desiredItemStock),
-            Status::create($status),
-            $id
-        );
+        $item = $this->createItem($itemId, $itemName, $itemIsAvailable);
+        $status = $this->createStatus($status);
+        return new Wishlist($email, $item, $status, $id);
+    }
+
+    /**
+     * @param int $id
+     * @param string $name
+     * @param bool $isAvailable
+     * @return Item
+     */
+    public function createItem($id, $name, $isAvailable)
+    {
+        return new Item($id, $name, $isAvailable);
+    }
+
+    /**
+     * @param string $status
+     * @return Status
+     */
+    public function createStatus($status)
+    {
+        return Status::create($status);
     }
 }

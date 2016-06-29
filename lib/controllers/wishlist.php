@@ -2,7 +2,7 @@
 
 use Develop\Business\Application\ProductWishlist\ItemResolver;
 use Develop\Business\Application\ProductWishlist\Repositories\PdoRepository as WishlistRepository;
-use Develop\Business\Product\Repositories\Product as ProductRepository;
+use Develop\Business\Application\Product\Repositories\Product as ProductRepository;
 use Develop\Business\Wishlist\Factory as WishlistFactory;
 use Develop\Business\Wishlist\UseCases\AddItemWishlist as AddItemWishlistUseCase;
 

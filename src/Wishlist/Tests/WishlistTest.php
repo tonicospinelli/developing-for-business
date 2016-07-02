@@ -21,6 +21,28 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($wishlist->getId());
     }
 
+    public function testShouldDefineAIdentifier()
+    {
+        $item = $this->prophesize(Item::class);
+        $status = $this->prophesize(Status::class);
+        $wishlist = new Wishlist('email@test.com', $item->reveal(), $status->reveal());
+
+        $identifiedWishlist = $wishlist->setId(1);
+
+        $this->assertNotEquals($wishlist, $identifiedWishlist);
+        $this->assertNotEmpty($identifiedWishlist->getId());
+    }
+
+    public function testShouldDefineAStatus()
+    {
+        $item = $this->prophesize(Item::class);
+        $wishlist = new Wishlist('email@test.com', $item->reveal(), Status::pending());
+
+        $identifiedWishlist = $wishlist->changeStatusTo(Status::sent());
+
+        $this->assertNotEquals($wishlist, $identifiedWishlist);
+    }
+
     public function testShouldCreateInstanceWithInvalidEmail()
     {
         $this->expectException(InvalidArgument::class);

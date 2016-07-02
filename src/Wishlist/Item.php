@@ -18,15 +18,15 @@ class Item
 
     /**
      * Item constructor.
-     * @param $id
-     * @param null $name
-     * @param bool $available
+     * @param int $id
+     * @param string $name
+     * @param bool $isAvailable
      */
-    public function __construct($id, $name = null, $available = false)
+    public function __construct($id, $name = null, $isAvailable = false)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->available = (bool)$available;
+        $this->available = (bool)$isAvailable;
     }
 
     /**

@@ -61,6 +61,15 @@ class Wishlist
     }
 
     /**
+     * @param int $id
+     * @return Wishlist
+     */
+    public function setId($id)
+    {
+        return new static($this->getEmail(), $this->getItem(), $this->getStatus(), $id);
+    }
+
+    /**
      * @return mixed
      */
     public function getEmail()
@@ -90,6 +99,15 @@ class Wishlist
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @param Status $status
+     * @return Wishlist
+     */
+    public function changeStatusTo(Status $status)
+    {
+        return new static($this->getEmail(), $this->getItem(), $status, $this->getId());
     }
 
     /**

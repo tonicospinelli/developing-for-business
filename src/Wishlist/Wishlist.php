@@ -107,7 +107,7 @@ class Wishlist
      */
     public function changeStatusTo(Status $status)
     {
-        return new static($this->getEmail(), $this->getItem(), $status, $this->getId());
+        $this->status = $status;
     }
 
     /**

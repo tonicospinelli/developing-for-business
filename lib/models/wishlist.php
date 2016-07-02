@@ -1,4 +1,8 @@
 <?php
+use Develop\Business\Wishlist\Factory;
+use Develop\Business\Wishlist\Status;
+use Develop\Business\Wishlist\Item;
+use Develop\Business\Wishlist\Wishlist;
 
 /**
  * validate wish list data
@@ -19,28 +23,34 @@ function isValidWishList(array $data)
 /**
  * Gets wish list data.
  * @param array $data
- * @return array
+ * @return Wishlist
  */
 function getWishList(array $data)
 {
-    return array(
-        'email' => $data['email'],
-        'product_id' => $data['product_id'],
-        'status' => 'P',
+    return new Wishlist(
+        $data['email'],
+        new Item($data['product_id']),
+        Status::pending(),
+        (isset($data['id']) ? $data['id'] : null)
     );
 }
 
 /**
  * Finds all products from given email.
  * @param string $email
- * @return array Returns wish list products from given email.
+ * @return Wishlist[] Returns wish list products from given email.
  */
 function findAllWishProducts($email)
 {
     $db = dbConnect();
     $query = <<<SQL
 SELECT
-  wishlists.id, products.name as product_name,  products.stock as product_stock, wishlists.status
+  wishlists.id,
+  wishlists.email,
+  products.id as product_id,
+  products.name as product_name,
+  (products.stock > 0) as product_available,
+  wishlists.status
 FROM
   wishlists
 INNER JOIN 
@@ -50,21 +60,21 @@ SQL;
 
     $stm = $db->prepare($query);
     $stm->execute([$email]);
-    return $stm->fetchAll(PDO::FETCH_ASSOC);
+    return $stm->fetchAll(\PDO::FETCH_FUNC, [Factory::class, 'createFromQueryResult']);
 }
 
 /**
  * Adds a new item into wish list of customer.
- * @param array $data
- * @return bool|string
+ * @param Wishlist $wishlist
+ * @return bool|int
  */
-function addWishItem(array $data)
+function addWishItem(Wishlist $wishlist)
 {
     $db = dbConnect();
     $db->beginTransaction();
     try {
-        $stm = $db->prepare('INSERT INTO wishlists (email, product_id) VALUES (?, ?)');
-        $stm->execute([$data['email'], $data['product_id']]);
+        $stm = $db->prepare('INSERT INTO wishlists (email, product_id, status) VALUES (?, ?, ?)');
+        $stm->execute([$wishlist->getEmail(), $wishlist->getItemId(), (string) $wishlist->getStatus()]);
         $db->commit();
         return $db->lastInsertId();
     } catch (Exception $e) {

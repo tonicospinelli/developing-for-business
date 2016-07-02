@@ -17,16 +17,17 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($wishlist as $wish): ?>
+        <?php /** @var \Develop\Business\Wishlist\Wishlist $wishedItem */?>
+        <?php foreach ($wishlist as $wishedItem): ?>
             <tr>
-                <td><?php echo $wish['id']; ?> </td>
-                <td><?php echo $wish['product_name']; ?> </td>
-                <?php if ($wish['product_stock'] == 0): ?>
-                    <td>Not Available</td>
-                <?php else: ?>
+                <td><?php echo $wishedItem->getId(); ?> </td>
+                <td><?php echo $wishedItem->getItemName(); ?> </td>
+                <?php if ($wishedItem->isAvailable()): ?>
                     <td>Available</td>
+                <?php else: ?>
+                    <td>Not Available</td>
                 <?php endif; ?>
-                <td><?php echo removeUrl('wishlist', $wish['id'], ['email' => $_GET['email']]); ?> </td>
+                <td><?php echo removeUrl('wishlist', $wishedItem->getId(), ['email' => $_GET['email']]); ?> </td>
             </tr>
         <?php endforeach; ?>
         </tbody>

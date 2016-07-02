@@ -4,7 +4,6 @@ use Develop\Business\Application\ProductWishlist\ItemResolver;
 use Develop\Business\Application\ProductWishlist\Repositories\PdoRepository as WishlistRepository;
 use Develop\Business\Application\Product\Repositories\Product as ProductRepository;
 use Develop\Business\Wishlist\Factory as WishlistFactory;
-use Develop\Business\Wishlist\UseCases\AddItemWishlist as AddItemWishlistUseCase;
 
 function wishlistListAction($email)
 {
@@ -14,24 +13,21 @@ function wishlistListAction($email)
     include TEMPLATE_DIR . '/wishlists/list.php';
 }
 
-function wishlistAddAction($email, $post)
+function wishlistAddAction(\Respect\Config\Container $container, $email, $post)
 {
-    $db = dbConnect();
-    $factory = new WishlistFactory();
-    $repository = new WishlistRepository($db, $factory);
-    $resolver = new ItemResolver(new ProductRepository($db));
-
     try {
         $intention = getWishList($post['wish_item']);
 
-        $useCase = new AddItemWishlistUseCase($repository, $factory, $resolver);
+        /** @var \Develop\Business\Wishlist\UseCases\AddItemWishlist $useCase */
+        $useCase = $container->wishlistAddItemWishlistUseCase;
         $wishlist = $useCase->execute($intention);
 
         $successmsg = "Item({$wishlist->getItemName()}) was added at wish list successfully!";
     } catch (\Exception $e) {
         $errormsg = $e->getMessage();
     }
-    $wishlist = $repository->findAllByEmail($email);
+
+    $wishlist = $container->wishlistRepository->findAllByEmail($email);
     include TEMPLATE_DIR . '/wishlists/list.php';
 }
 

@@ -2,6 +2,8 @@
 
 namespace Develop\Business\Wishlist;
 
+use Develop\Business\Wishlist\Intentions\AddItemWishlist as AddItemWishlistIntention;
+
 class Factory
 {
     /**
@@ -13,7 +15,7 @@ class Factory
      * @param string $status
      * @return Wishlist
      */
-    public function createFromQueryResult($id, $email, $itemId, $itemName, $itemIsAvailable, $status)
+    public function fromQueryResult($id, $email, $itemId, $itemName, $itemIsAvailable, $status)
     {
         $item = $this->createItem($itemId, $itemName, $itemIsAvailable);
         $status = $this->createStatus($status);
@@ -38,5 +40,17 @@ class Factory
     public function createStatus($status)
     {
         return Status::create($status);
+    }
+
+    public function newFromEmailAndItem($email, Item $item)
+    {
+        return $this->fromQueryResult(
+            null,
+            $email,
+            $item->getId(),
+            $item->getName(),
+            $item->isAvailable(),
+            Status::PENDING
+        );
     }
 }

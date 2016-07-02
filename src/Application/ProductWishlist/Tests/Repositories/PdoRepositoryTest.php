@@ -1,12 +1,13 @@
 <?php
 
-namespace Develop\Business\Application\Wishlist\Tests\Repositories;
+namespace Develop\Business\Application\ProductWishlist\Tests\Repositories;
 
-use Develop\Business\Application\Wishlist\Repositories\PdoRepository;
-use Develop\Business\Application\Wishlist\Tests\Repositories\Stubs\PDOSpy;
+use Develop\Business\Application\ProductWishlist\Repositories\PdoRepository;
+use Develop\Business\Application\ProductWishlist\Tests\Repositories\Stubs\PDOSpy;
 use Develop\Business\Wishlist\Exceptions\WishlistException;
 use Develop\Business\Wishlist\Exceptions\WishlistNotFoundException;
 use Develop\Business\Wishlist\Factory as WishlistFactory;
+use Develop\Business\Wishlist\Item;
 use Develop\Business\Wishlist\Status;
 use Develop\Business\Wishlist\Wishlist;
 
@@ -65,7 +66,7 @@ class PdoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testAddNewRowSuccessful()
     {
-        $wishlist = $this->factory->createFromQueryResult(null, 'email@test.com', 1, 'Hat', false, Status::PENDING);
+        $wishlist = $this->factory->fromQueryResult(null, 'email@test.com', 1, 'Hat', false, Status::PENDING);
 
         $wishlistAdded = $this->repository->add($wishlist);
 
@@ -85,7 +86,7 @@ class PdoRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->expectException(WishlistException::class);
         $this->expectExceptionMessage('The item(T-Shirt) was not added into your wishlist.');
 
-        $wishlist = $this->factory->createFromQueryResult(null, 'email@test.com', 1, 'T-Shirt', false, Status::PENDING);
+        $wishlist = $this->factory->fromQueryResult(null, 'email@test.com', 1, 'T-Shirt', false, Status::PENDING);
 
         /** @var PDOSpy $pdoSpy */
         $pdoSpy = $this->repository->getDriver();
@@ -96,7 +97,7 @@ class PdoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteRowSuccessful()
     {
-        $wishlist = $this->factory->createFromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
+        $wishlist = $this->factory->fromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
 
         /** @var PDOSpy $pdoSpy */
         $pdoSpy = $this->repository->getDriver();
@@ -114,7 +115,7 @@ class PdoRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->expectException(WishlistException::class);
         $this->expectExceptionMessage('The item(Hat) was not delete from your wishlist.');
 
-        $wishlist = $this->factory->createFromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
+        $wishlist = $this->factory->fromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
 
         /** @var PDOSpy $pdoSpy */
         $pdoSpy = $this->repository->getDriver();
@@ -125,7 +126,7 @@ class PdoRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateRowSuccessful()
     {
-        $wishlist = $this->factory->createFromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
+        $wishlist = $this->factory->fromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
 
         $this->assertTrue($this->repository->update($wishlist));
 
@@ -140,12 +141,36 @@ class PdoRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->expectException(WishlistException::class);
         $this->expectExceptionMessage('The item(Hat) was not updated from your wishlist.');
 
-        $wishlist = $this->factory->createFromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
+        $wishlist = $this->factory->fromQueryResult(1, 'email@test.com', 1, 'Hat', false, Status::PENDING);
 
         /** @var PDOSpy $pdoSpy */
         $pdoSpy = $this->repository->getDriver();
         $pdoSpy->failureOnWrite = true;
 
         $this->repository->update($wishlist);
+    }
+
+    public function testFindOneByEmailAndItemIdSuccessful()
+    {
+        $wishlist = $this->repository->findOneByEmailAndItemId('email@test.com', 1);
+
+        $this->assertInstanceOf(Wishlist::class, $wishlist);
+        $this->assertInstanceOf(Item::class, $wishlist->getItem());
+    }
+
+    public function testFindOneByEmailAndItemIdFailed()
+    {
+        $this->expectException(WishlistNotFoundException::class);
+        $this->expectExceptionMessage('The item was not found by email(email@test.com) and itemId(2) from your wishlist.');
+
+        $this->repository->findOneByEmailAndItemId('email@test.com', 2);
+    }
+
+    public function testFindOneByEmailAndItemSuccessful()
+    {
+        $wishlist = $this->repository->findOneByEmailAndItem('email@test.com', new Item(1));
+
+        $this->assertInstanceOf(Wishlist::class, $wishlist);
+        $this->assertInstanceOf(Item::class, $wishlist->getItem());
     }
 }

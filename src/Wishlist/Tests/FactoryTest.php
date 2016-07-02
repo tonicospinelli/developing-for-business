@@ -10,7 +10,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateAWishlistObject()
     {
         $factory = new Factory();
-        $wishlist = $factory->createFromQueryResult(1, 'email@test.com', 100, 'Shoes', false, 'P');
+        $wishlist = $factory->fromQueryResult(1, 'email@test.com', 100, 'Shoes', false, 'P');
 
         $this->assertInstanceOf(Wishlist::class, $wishlist);
     }

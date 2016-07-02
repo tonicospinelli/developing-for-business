@@ -1,9 +1,11 @@
 <?php
 
-namespace Develop\Business\Application\Wishlist\Repositories;
+namespace Develop\Business\Application\ProductWishlist\Repositories;
 
 use Develop\Business\Wishlist\Exceptions\WishlistException;
+use Develop\Business\Wishlist\Exceptions\WishlistNotFoundException;
 use Develop\Business\Wishlist\Factory;
+use Develop\Business\Wishlist\Item;
 use Develop\Business\Wishlist\Repositories\Wishlist as WishlistRepository;
 use Develop\Business\Wishlist\Wishlist;
 
@@ -59,7 +61,7 @@ SQL;
 
         $stm = $this->driver->prepare($query);
         $stm->execute([$email]);
-        return $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'create']);
+        return $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'fromQueryResult']);
     }
 
     public function add(Wishlist $wishlist)
@@ -117,7 +119,7 @@ WHERE
 SQL;
         $stm = $this->driver->prepare($query);
         $stm->execute();
-        return $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'create']);
+        return $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'fromQueryResult']);
     }
 
     public function find($id)
@@ -141,7 +143,7 @@ SQL;
 
         $stm = $this->driver->prepare($query);
         $stm->execute([$id]);
-        $retriveWishlist = $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'create']);
+        $retriveWishlist = $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'fromQueryResult']);
 
         if (empty($retriveWishlist)) {
             throw WishlistException::notFoundById($id);
@@ -169,5 +171,44 @@ SQL;
         }
 
         throw WishlistException::notUpdated($wishlist);
+    }
+
+    /**
+     * @param string $email
+     * @param int $itemId
+     * @return \Develop\Business\Wishlist\Wishlist
+     * @throws WishlistNotFoundException
+     */
+    public function findOneByEmailAndItemId($email, $itemId)
+    {
+        $query = <<<SQL
+SELECT
+  wishlists.id,
+  wishlists.email,
+  products.id as product_id,
+  products.name as product_name,
+  (products.stock > 0) as product_available,
+  wishlists.status
+FROM
+  wishlists
+INNER JOIN
+  products ON products.id = product_id
+WHERE
+  wishlists.email = ?
+  AND wishlists.product_id = ?
+LIMIT 1
+SQL;
+        $stm = $this->driver->prepare($query);
+        $stm->execute([$email, $itemId]);
+        $rows = $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'fromQueryResult']);
+        if (empty($rows)) {
+            throw WishlistException::notFoundByEmailAndWishlist($email, $itemId);
+        }
+        return reset($rows);
+    }
+
+    public function findOneByEmailAndItem($email, Item $item)
+    {
+        return $this->findOneByEmailAndItemId($email, $item->getId());
     }
 }

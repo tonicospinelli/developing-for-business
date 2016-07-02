@@ -1,7 +1,7 @@
 <?php
-use Develop\Business\Wishlist\Factory;
-use Develop\Business\Wishlist\Status;
-use Develop\Business\Wishlist\Item;
+use Develop\Business\Application\ProductWishlist\ItemResolver;
+use Develop\Business\Product\Repositories\Product;
+use Develop\Business\Wishlist\Intentions\AddItemWishlist as AddItemWishlistIntention;
 use Develop\Business\Wishlist\Wishlist;
 
 /**
@@ -23,16 +23,11 @@ function isValidWishList(array $data)
 /**
  * Gets wish list data.
  * @param array $data
- * @return Wishlist
+ * @return AddItemWishlistIntention
  */
 function getWishList(array $data)
 {
-    return new Wishlist(
-        $data['email'],
-        new Item($data['product_id']),
-        Status::pending(),
-        (isset($data['id']) ? $data['id'] : null)
-    );
+    return new AddItemWishlistIntention($data['email'], $data['product_id']);
 }
 
 /**

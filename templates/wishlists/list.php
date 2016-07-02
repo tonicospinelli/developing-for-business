@@ -4,7 +4,7 @@
     <h3><?php echo $title;?></h3>
     <?php if (isset($errormsg)): ?>
         <div class="alert error"><?php echo $errormsg; ?> </div>
-    <?php elseif (isset($wishItem)): ?>
+    <?php elseif (isset($successmsg)): ?>
         <div class="alert success"><?php echo $successmsg; ?></div>
     <?php endif; ?>
     <table>

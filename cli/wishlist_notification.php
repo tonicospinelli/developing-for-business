@@ -1,6 +1,6 @@
 <?php
 
-use Develop\Business\Application\Wishlist\Repositories\PdoRepository as WishlistRepository;
+use Develop\Business\Application\ProductWishlist\Repositories\PdoRepository as WishlistRepository;
 use Develop\Business\Wishlist\Factory as WishlistFactory;
 
 require_once __DIR__ . '/../config/app.php';

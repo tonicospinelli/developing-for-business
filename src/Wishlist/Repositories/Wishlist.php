@@ -4,6 +4,7 @@ namespace Develop\Business\Wishlist\Repositories;
 
 use Develop\Business\Wishlist\Exceptions\WishlistException;
 use Develop\Business\Wishlist\Exceptions\WishlistNotFoundException;
+use Develop\Business\Wishlist\Item;
 
 interface Wishlist
 {
@@ -45,4 +46,19 @@ interface Wishlist
      * @return \Develop\Business\Wishlist\Wishlist[] All desired items so that are available to notify the customer.
      */
     public function findAllToNotify();
+
+    /**
+     * @param string $email
+     * @param int $itemId
+     * @return \Develop\Business\Wishlist\Wishlist
+     * @throws WishlistNotFoundException
+     */
+    public function findOneByEmailAndItemId($email, $itemId);
+
+    /**
+     * @param string $email
+     * @param $item $item
+     * @return \Develop\Business\Wishlist\Wishlist
+     */
+    public function findOneByEmailAndItem($email, Item $item);
 }

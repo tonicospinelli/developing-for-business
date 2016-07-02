@@ -1,12 +1,12 @@
 <?php
 
-namespace Develop\Business\Application\Wishlist\Tests\Repositories\Stubs;
+namespace Develop\Business\Application\ProductWishlist\Tests\Repositories\Stubs;
 
 use Develop\Business\Wishlist\Factory as WishlistFactory;
 use Develop\Business\Wishlist\Factory;
 use Develop\Business\Wishlist\Status;
 
-class FindAllByEmailStatementStub extends \PDOStatement
+class FindAllToNotifyStatementStub extends \PDOStatement
 {
     private $rows;
 
@@ -38,7 +38,8 @@ FROM
 INNER JOIN
   products ON products.id = product_id
 WHERE
-  wishlists.email = ?';
+  products.stock > 0
+  AND wishlists.status = \'P\'';
     }
     public function setFetchMode($mode, $params = null)
     {
@@ -47,7 +48,7 @@ WHERE
     public function execute($input_parameters = [])
     {
         $this->rows = [
-            $this->factory->createFromQueryResult(1, 'email@test.com', 1, 'Shoes', false, Status::PENDING)
+            $this->factory->fromQueryResult(1, 'email@test.com', 1, 'Shoes', false, Status::PENDING)
         ];
     }
 

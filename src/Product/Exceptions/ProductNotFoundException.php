@@ -11,6 +11,6 @@ class ProductNotFoundException extends \InvalidArgumentException implements Exce
 
     public static function byIdentifier($identifier)
     {
-        return new static("The product({$identifier}) was not found.");
+        return static::byName($identifier);
     }
 }

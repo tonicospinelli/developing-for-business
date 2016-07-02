@@ -2,22 +2,37 @@
 
 namespace Develop\Business\Product\Intentions;
 
-class AddProduct implements Intention
+class UpdateProduct implements IntentionIdentified
 {
+    private $id;
+
     private $name;
+
     private $unitPrice;
+
     private $stock = 0;
 
     /**
-     * @param string $name
-     * @param float $unitPrice
+     * UpdateProduct constructor.
+     * @param $id
+     * @param $name
+     * @param $unitPrice
      * @param int $stock
      */
-    public function __construct($name, $unitPrice, $stock = 0)
+    public function __construct($id, $name, $unitPrice, $stock)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->unitPrice = $unitPrice;
         $this->stock = $stock;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

@@ -8,14 +8,17 @@ class Product
      * @var int
      */
     private $id;
+
     /**
      * @var string
      */
     private $name;
+
     /**
      * @var float
      */
     private $unitPrice;
+
     /**
      * @var int
      */
@@ -45,7 +48,7 @@ class Product
     }
 
     /**
-     * 
+     *
      * @param int $id
      * @return Product Returns a new object with given ID.
      */
@@ -76,5 +79,21 @@ class Product
     public function getStock()
     {
         return $this->stock;
+    }
+
+    public function merge(Product $product)
+    {
+        $callback = function ($value, $default = null) {
+            if (!empty($value)) {
+                return $value;
+            }
+            return $default;
+        };
+        return new static(
+            $callback($product->getName(), $this->getName()),
+            $callback($product->getUnitPrice(), $this->getUnitPrice()),
+            $callback($product->getStock(), $this->getStock()),
+            $this->getId()
+        );
     }
 }

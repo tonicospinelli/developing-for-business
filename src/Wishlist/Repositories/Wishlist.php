@@ -48,6 +48,13 @@ interface Wishlist
     public function findAllToNotify();
 
     /**
+     * @param Item $item
+     * @return \Develop\Business\Wishlist\Wishlist[] All emails desired in specific item 
+     * so that are available to notify the customer.
+     */
+    public function findAllCustomersByItem(Item $item);
+
+    /**
      * @param string $email
      * @param int $itemId
      * @return \Develop\Business\Wishlist\Wishlist

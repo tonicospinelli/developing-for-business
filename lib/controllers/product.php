@@ -36,22 +36,23 @@ function productAddAction($product)
 }
 
 /**
- * @param $post
+ * @param \Respect\Config\Container $container
+ * @param $id
+ * @param $product
  */
-function productUpdateAction($id, $product)
+function productUpdateAction(\Respect\Config\Container $container, $id, $product)
 {
-    $db = dbConnect();
-
-    $intention = new UpdateProductIntention($id, $product['name'], $product['unit_price'], $product['stock']);
-    $repository = new ProductRepository($db);
     try {
-        $useCase = new UpdateProductUseCase($repository, new ProductFactory());
+        $intention = new UpdateProductIntention($id, $product['name'], $product['unit_price'], $product['stock']);
+        $useCase = $container->productUpdateUseCase;
         $product = $useCase->execute($intention);
         $successmsg = "Product {$product->getName()} updated successful";
     } catch (\Develop\Business\Product\Exceptions\ProductNotFoundException $e) {
         $errormsg = $e->getMessage();
     }
-    productListAction();
+
+    $products = $container->productRepository->findAll();
+    include TEMPLATE_DIR . '/products/list.php';
 }
 
 function productRemoveAction($id)

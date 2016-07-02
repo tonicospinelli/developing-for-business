@@ -69,6 +69,10 @@ class PDOSpy extends \PDO
             return new FindOneByEmailAndItemIdStatementStub($this->factory);
         }
 
+        if (FindAllCustomersByItemStatementStub::equalsTo($statement)) {
+            return new FindAllCustomersByItemStatementStub($this->factory);
+        }
+
         if ($statement == 'INSERT INTO wishlists (email, product_id, status) VALUES (?, ?, ?)') {
             return ($this->failureOnWrite ? new WriteFailureStatementStub() : new WriteSuccessStatementStub());
         }

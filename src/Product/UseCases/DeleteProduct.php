@@ -4,12 +4,12 @@ namespace Develop\Business\Product\UseCases;
 
 use Develop\Business\Product\Exceptions\ProductException;
 use Develop\Business\Product\Factory as ProductFactory;
-use Develop\Business\Product\Intentions\Intention;
 use Develop\Business\Product\Intentions\IdentifiedIntention;
+use Develop\Business\Product\Intentions\Intention;
 use Develop\Business\Product\Product;
 use Develop\Business\Product\Repositories\Product as ProductRepository;
 
-class UpdateProduct implements UseCase
+class DeleteProduct implements UseCase
 {
     /**
      * @var ProductRepository
@@ -37,24 +37,19 @@ class UpdateProduct implements UseCase
      */
     public function execute(Intention $intention)
     {
-        return $this->updateProduct($intention);
+        return $this->deleteProduct($intention);
     }
 
     /**
-     * @param IdentifiedIntention $intention
      * @return Product
      * @throws ProductException
      */
-    private function updateProduct(IdentifiedIntention $intention)
+    private function deleteProduct(IdentifiedIntention $intention)
     {
         $product = $this->repository->find($intention->getId());
 
-        $productDirty = $this->factory->createFromIntentionIdentified($intention);
+        $this->repository->delete($product);
 
-        $updatedProduct = $product->merge($productDirty);
-
-        $this->repository->update($updatedProduct);
-
-        return $updatedProduct;
+        return $product;
     }
 }

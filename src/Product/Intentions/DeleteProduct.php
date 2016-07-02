@@ -2,21 +2,17 @@
 
 namespace Develop\Business\Product\Intentions;
 
-class UpdateProduct extends AddProduct implements IdentifiedIntention
+class DeleteProduct implements IdentifiedIntention
 {
     private $id;
 
     /**
      * UpdateProduct constructor.
      * @param $id
-     * @param $name
-     * @param $unitPrice
-     * @param int $stock
      */
-    public function __construct($id, $name, $unitPrice, $stock)
+    public function __construct($id)
     {
         $this->id = $id;
-        parent::__construct($name, $unitPrice, $stock);
     }
 
     /**

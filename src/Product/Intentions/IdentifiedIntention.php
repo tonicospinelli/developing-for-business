@@ -2,7 +2,7 @@
 
 namespace Develop\Business\Product\Intentions;
 
-interface IntentionIdentified extends Intention
+interface IdentifiedIntention extends Intention
 {
     public function getId();
 }

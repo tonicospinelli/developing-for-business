@@ -2,13 +2,12 @@
 
 namespace Develop\Business\Product\Tests\UseCases;
 
-use Develop\Business\Product\Exceptions\ProductExistsException;
+use Develop\Business\Product\Exceptions\ProductException;
 use Develop\Business\Product\Exceptions\ProductNotFoundException;
 use Develop\Business\Product\Factory;
 use Develop\Business\Product\Intentions\UpdateProduct as UpdateProductIntention;
 use Develop\Business\Product\Product;
 use Develop\Business\Product\Repositories\Product as ProductRepository;
-use Develop\Business\Product\UseCases\AddProduct;
 use Develop\Business\Product\UseCases\UpdateProduct;
 use Prophecy\Argument;
 
@@ -33,11 +32,16 @@ class UpdateProductTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateAProductFailed()
     {
-        $this->expectException(ProductNotFoundException::class);
-        $this->expectExceptionMessage('The product(1) was not found');
+        $this->expectException(ProductException::class);
+        $this->expectExceptionMessage('The product(T-Shirt) was not updated');
 
         $repository = $this->prophesize(ProductRepository::class);
-        $repository->find(1)->willThrow(ProductNotFoundException::byIdentifier(1));
+        $repository->find(1)->willReturn(new Product('T-Shirt', 33.9, 10, 1));
+        $repository
+            ->update(Argument::type(Product::class))
+            ->willThrow(
+                ProductException::notUpdated(new Product('T-Shirt', 33.9, 10, 1))
+            );
 
         $intention = new UpdateProductIntention(1, 'Shoes', 33.9, 10);
 

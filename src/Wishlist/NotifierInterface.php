@@ -4,5 +4,9 @@ namespace Develop\Business\Wishlist;
 
 interface NotifierInterface
 {
-    public function send($email, $message);
+    /**
+     * @param Wishlist $wishlist
+     * @return void
+     */
+    public function send(Wishlist $wishlist);
 }

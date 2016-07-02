@@ -32,10 +32,7 @@ class NotifyProductsAvailable
         $wishlists = $this->repository->findAllToNotify();
 
         foreach ($wishlists as $wishlist) {
-            $intention->getNotifier()->send(
-                $wishlist->getEmail(),
-                "Dude, your desired product({$wishlist->getItemName()}) is available"
-            );
+            $intention->getNotifier()->send($wishlist);
             $wishlist->changeStatusTo(Status::sent());
             $this->repository->update($wishlist);
         }

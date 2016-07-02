@@ -56,6 +56,14 @@ class PdoRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $wishlist->getId());
     }
 
+    public function testFindAllCustomersByItem()
+    {
+        $wishlists = $this->repository->findAllCustomersByItem(new Item(1));
+
+        $this->assertCount(1, $wishlists);
+        $this->assertInstanceOf(Wishlist::class, reset($wishlists));
+    }
+
     public function testNotFindRowById()
     {
         $this->expectException(WishlistNotFoundException::class);

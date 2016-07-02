@@ -121,6 +121,31 @@ SQL;
         $stm->execute();
         return $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'fromQueryResult']);
     }
+    /**
+     * @inheritdoc
+     */
+    public function findAllCustomersByItem(Item $item)
+    {
+        $query = <<<SQL
+SELECT
+  wishlists.id,
+  wishlists.email,
+  products.id as product_id,
+  products.name as product_name,
+  (products.stock > 0) as product_available,
+  wishlists.status
+FROM
+  wishlists
+INNER JOIN
+  products ON products.id = product_id
+WHERE
+  wishlists.product_id = ?
+  AND wishlists.status = 'P'
+SQL;
+        $stm = $this->driver->prepare($query);
+        $stm->execute([$item->getId()]);
+        return $stm->fetchAll(\PDO::FETCH_FUNC, [$this->factory, 'fromQueryResult']);
+    }
 
     public function find($id)
     {

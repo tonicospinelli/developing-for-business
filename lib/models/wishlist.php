@@ -1,6 +1,4 @@
 <?php
-use Develop\Business\Application\ProductWishlist\ItemResolver;
-use Develop\Business\Product\Repositories\Product;
 use Develop\Business\Wishlist\Intentions\AddItemWishlist as AddItemWishlistIntention;
 use Develop\Business\Wishlist\Wishlist;
 

@@ -2,11 +2,12 @@
 namespace Develop\Business\Application\ProductWishlist;
 
 use Develop\Business\Wishlist\NotifierInterface;
+use Develop\Business\Wishlist\Wishlist;
 
-class EchoNotifier implements NotifierInterface
+final class EchoNotifier implements NotifierInterface
 {
-    public function send($email, $message)
+    public function send(Wishlist $wishlist)
     {
-        echo "Email: {$email}, Message: {$message}" . PHP_EOL;
+        echo "Email: {$wishlist->getEmail()}, Message: {$wishlist->getItemName()}" . PHP_EOL;
     }
 }

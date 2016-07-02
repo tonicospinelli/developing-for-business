@@ -4,9 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "438a98fbf7b1cd2eb13d46604f7363c8",
-    "content-hash": "0c0e6a39b73fe5fadf61f22dce5e05aa",
-    "packages": [],
+    "hash": "5cc9d01a3c6db5c50b928f129d8180ca",
+    "content-hash": "78e18b098cc6e34f6f747acd04ae1f1c",
+    "packages": [
+        {
+            "name": "respect/config",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Respect/Config.git",
+                "reference": "7c256378a9d32adc012e252598445d880b3fb3a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Respect/Config/zipball/7c256378a9d32adc012e252598445d880b3fb3a7",
+                "reference": "7c256378a9d32adc012e252598445d880b3fb3a7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4",
+                "respect/test": "dev-master"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Respect\\": "library/Respect"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Respect/Config Contributors",
+                    "homepage": "https://github.com/Respect/Config/graphs/contributors"
+                }
+            ],
+            "description": "A powerful, small, deadly simple configurator and dependency injection container made to be easy.",
+            "homepage": "https://github.com/Respect/Config",
+            "keywords": [
+                "config",
+                "dependency injection",
+                "dic",
+                "respect"
+            ],
+            "time": "2015-03-27 17:34:09"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
